@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 import { UserRequest } from "../type/user-request";
 dotenv.config();
 import { prismaClient } from "../application/database";
-import { access } from "fs";
 export const authMiddleware = async (
   req: UserRequest,
   res: Response,
@@ -21,7 +20,6 @@ export const authMiddleware = async (
 
   try {
     const decode = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string);
-    console.log(decode);
     next();
   } catch (error) {
     res.status(401).json({
@@ -68,7 +66,7 @@ export const refreshToken = async (
       },
       process.env.ACCESS_TOKEN_SECRET as string,
       {
-        expiresIn: "15s",
+        expiresIn: "20s",
       }
     );
 

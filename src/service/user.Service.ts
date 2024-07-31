@@ -1,4 +1,3 @@
-import { number } from "zod";
 import { prismaClient } from "../application/database";
 import { ResponseError } from "../error/error";
 import {
@@ -77,6 +76,7 @@ export class userService {
   }
 
   static async login(request: LoginRequest): Promise<loginResponse> {
+    console.log(request);
     const userRequest = Validation.validate(UserValidation.LOGIN, request);
 
     let user = await prismaClient.user.findFirst({
@@ -145,11 +145,11 @@ export class userService {
     request: updateUserRequest,
     token: string
   ): Promise<UpdateResponse> {
-    const userRequest = Validation.validate(UserValidation.UPDATE, request);
-
     if (!token) {
-      throw new ResponseError(400, "Unauthorized");
+      throw new ResponseError(401, "Unauthorized");
     }
+
+    const userRequest = Validation.validate(UserValidation.UPDATE, request);
 
     request.token = token;
 
